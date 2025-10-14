@@ -1,0 +1,175 @@
+---
+# Pod with ImagePullBackOff
+apiVersion: v1
+kind: Pod
+metadata:
+  name: failing-pod-image
+  namespace: default
+  labels:
+    app: failing
+spec:
+  containers:
+  - name: bad-container
+    image: nonexistent-image:doesnotexist
+    ports:
+    - containerPort: 80
+
+---
+# Pod with CrashLoopBackOff
+apiVersion: v1
+kind: Pod
+metadata:
+  name: failing-pod-crash
+  namespace: default
+  labels:
+    app: failing
+spec:
+  containers:
+  - name: crash-container
+    image: busybox:latest
+    command: ["sh", "-c", "exit 1"]
+
+---
+# Deployment with unavailable replicas (due to bad image)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: failing-deployment
+  namespace: default
+  labels:
+    app: failing-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: failing-deploy
+  template:
+    metadata:
+      labels:
+        app: failing-deploy
+    spec:
+      containers:
+      - name: bad-container
+        image: invalid-image:notfound
+        ports:
+        - containerPort: 80
+
+---
+# StatefulSet with failing pods
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: failing-statefulset
+  namespace: default
+spec:
+  serviceName: "failing-svc"
+  replicas: 2
+  selector:
+    matchLabels:
+      app: failing-sts
+  template:
+    metadata:
+      labels:
+        app: failing-sts
+    spec:
+      containers:
+      - name: bad-container
+        image: nonexistent:image
+        ports:
+        - containerPort: 80
+
+---
+# Service for failing StatefulSet
+apiVersion: v1
+kind: Service
+metadata:
+  name: failing-svc
+  namespace: default
+spec:
+  selector:
+    app: failing-sts
+  ports:
+  - port: 80
+    targetPort: 80
+  clusterIP: None
+
+---
+# Failing Job (exits with error)
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: failing-job
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+      - name: failing-container
+        image: busybox:latest
+        command: ["sh", "-c", "echo 'This job will fail' && exit 1"]
+      restartPolicy: Never
+  backoffLimit: 2
+
+---
+# CronJob that creates failing jobs
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: failing-cronjob
+  namespace: default
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: failing-container
+            image: busybox:latest
+            command: ["sh", "-c", "echo 'CronJob task failing' && exit 1"]
+          restartPolicy: Never
+  suspend: true  # Start suspended so it doesn't run automatically
+
+---
+# Pending PVC (no storage class or PV available)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: failing-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "nonexistent-storage-class"
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+# DaemonSet with failing pods
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: failing-daemonset
+  namespace: default
+  labels:
+    app: failing-ds
+spec:
+  selector:
+    matchLabels:
+      app: failing-ds
+  template:
+    metadata:
+      labels:
+        app: failing-ds
+    spec:
+      containers:
+      - name: bad-container
+        image: invalid-image:missing
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+

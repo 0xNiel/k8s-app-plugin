@@ -1,0 +1,108 @@
+---
+# Healthy Pod
+apiVersion: v1
+kind: Pod
+metadata:
+  name: healthy-pod
+  namespace: default
+  labels:
+    app: healthy
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+
+---
+# Healthy Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: healthy-deployment
+  namespace: default
+  labels:
+    app: healthy-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: healthy-deploy
+  template:
+    metadata:
+      labels:
+        app: healthy-deploy
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+
+---
+# Healthy StatefulSet
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: healthy-statefulset
+  namespace: default
+spec:
+  serviceName: "nginx"
+  replicas: 2
+  selector:
+    matchLabels:
+      app: healthy-sts
+  template:
+    metadata:
+      labels:
+        app: healthy-sts
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+
+---
+# Service for StatefulSet
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  namespace: default
+spec:
+  selector:
+    app: healthy-sts
+  ports:
+  - port: 80
+    targetPort: 80
+  clusterIP: None
+
+---
+# Healthy Job (completes successfully)
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: healthy-job
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+      - name: busybox
+        image: busybox:latest
+        command: ["sh", "-c", "echo 'Job completed successfully' && sleep 5"]
+      restartPolicy: Never
+  backoffLimit: 3
+

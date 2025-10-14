@@ -1,0 +1,56 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+bin/
+dist/
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+coverage.html
+
+# Dependency directories
+vendor/
+
+# Go workspace file
+go.work
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Tools directory
+tools/
+
+# Kubernetes config (don't commit kubeconfig)
+*.kubeconfig
+kubeconfig
+
+# Local kind config
+kind-config.yaml
+
+# Build artifacts
+*.o
+*.a
+
+# Temporary files
+tmp/
+temp/
+
+# Log files
+*.log
+
+# References
+References/
