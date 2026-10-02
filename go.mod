@@ -1,4 +1,4 @@
-module github.com/odnielgonzalez/k8s-app-plugin
+module github.com/0xNiel/k8s-app-plugin
 
 go 1.21
 

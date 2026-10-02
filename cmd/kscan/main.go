@@ -9,7 +9,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/odnielgonzalez/k8s-app-plugin/pkg/scanner"
+	"github.com/0xNiel/k8s-app-plugin/pkg/scanner"
 	"k8s.io/client-go/util/homedir"
 )
 

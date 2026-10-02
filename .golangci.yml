@@ -16,7 +16,7 @@ linters-settings:
   lll:
     line-length: 140
   goimports:
-    local-prefixes: github.com/odnielgonzalez/k8s-app-plugin
+    local-prefixes: github.com/0xNiel/k8s-app-plugin
   gocritic:
     enabled-tags:
       - diagnostic

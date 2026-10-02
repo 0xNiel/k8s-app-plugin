@@ -12,7 +12,7 @@ Get up and running with the Kubernetes Failure Scanner in under 5 minutes!
 
 ```bash
 # Clone and build
-git clone https://github.com/odnielgonzalez/k8s-app-plugin.git
+git clone https://github.com/0xNiel/k8s-app-plugin.git
 cd k8s-app-plugin
 make deps
 make build

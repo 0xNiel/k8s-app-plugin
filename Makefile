@@ -1,7 +1,7 @@
 # ====================================================================================
 # Setup Project
 PROJECT_NAME := k8s-app-plugin
-PROJECT_REPO := github.com/odnielgonzalez/$(PROJECT_NAME)
+PROJECT_REPO := github.com/0xNiel/$(PROJECT_NAME)
 
 # ====================================================================================
 # Setup Go

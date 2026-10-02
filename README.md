@@ -35,7 +35,7 @@ The scanner uses intelligent heuristics to detect various failure conditions:
 
 ```bash
 # Clone the repository
-git clone https://github.com/odnielgonzalez/k8s-app-plugin.git
+git clone https://github.com/0xNiel/k8s-app-plugin.git
 cd k8s-app-plugin
 
 # Download dependencies
@@ -245,7 +245,7 @@ The project includes:
 
 ## License
 
-MIT License - feel free to use this project for any purpose.
+MIT License - see [LICENSE](LICENSE) for details.
 
 ## Troubleshooting
 
